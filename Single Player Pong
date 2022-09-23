@@ -1,0 +1,105 @@
+//This code on processing allows the person who runs it to play pong where the mouse controls the paddle. Clicking the mouse enables a 'crazy mode'
+
+//Declare new varaible "circleX"
+float circleX;
+float directionX;
+float dirandomX;
+boolean play=true; //makes it so until the value is !true play continues
+
+//Declare new varaible "circleY"
+float circleY;
+float directionY;
+float dirandomY;
+float gap=30;
+int paddleWidth=100; //this is the width of the paddle--can be changed with no effect on gameplay
+int paddlemin=50;
+float speed=.5;
+int score=0;
+void setup() {
+  size(640, 360);
+  circleX=random(80, width-80);
+  circleY=1;
+  //set initial random direction X
+  dirandomX=random(-1, 1);
+  if (dirandomX<0) {
+    directionX=-1;
+  } else { 
+    directionX=1;
+  }
+
+  //set initial random direction Y
+  dirandomY=random(-1, 1);
+  if (dirandomY<0) {
+    directionY=-1;
+  } else { 
+    directionY=1;
+  }
+}
+
+
+
+
+void draw() {
+
+  if (play) {
+
+    if (!mousePressed ) { //this makes it so if mouse is pressed, it starts crazy rainbow ball sequence
+      background(50);
+    }
+
+
+    fill(random(0, 255), random(0, 255), random(0, 255)); //ball color is randomized
+    ellipse(circleX, circleY, 25, 25); //ball size
+
+    //Update direction X and Y
+    circleX=circleX+(5*directionX);
+    circleY=circleY+(2*directionY);
+
+    //Change direction once it reaches one end
+    if (circleX>=width || circleX<=0) {
+      directionX=directionX*-1;
+    }
+
+    //stops game if ball misses paddle
+    if (circleY>=height+20) {
+      play=false;
+    }
+
+    //bounces off top of screen
+    if (circleY<=0) {
+      directionY=directionY*-1;
+    }
+    rectMode(CENTER);
+    fill(255);
+    paddlemin=constrain(mouseX, paddleWidth/2, width-(paddleWidth/2)); //because paddlemin is defined at start as 50, will restrict it 50 away from mouseX and edge so the paddle doesn't leave screen
+    rect(paddlemin, height-gap, paddleWidth, 20);
+
+
+    if (circleY>=310 ) {
+      if (circleX<=mouseX+50 && circleX>=mouseX-50) {
+        directionY=directionY*-1.1;
+        score=score+1;
+      }
+    }
+    textAlign(CENTER, CENTER);
+    textSize(25);
+    fill(255);
+    text("score: " + score, width-width/5, height-height+50);
+  }
+
+  //these are the game over functions
+  if (!play) {
+    textSize(100);
+    fill(255, 0, 0);
+    text("GAME OVER", width/2, height/2);
+    textSize(30);
+    text("Press any key to play again", (width/2)-30, (height/2)+60);
+    //this allows the game to be restarted
+    if (keyPressed) {
+      play=true;
+      //circleY=0;
+      score=0;
+      setup();
+    }
+  }
+}
