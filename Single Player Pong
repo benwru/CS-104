@@ -1,5 +1,4 @@
 //This code on processing allows the person who runs it to play pong where the mouse controls the paddle. Clicking the mouse enables a 'crazy mode'
-
 //Declare new varaible "circleX"
 float circleX;
 float directionX;
@@ -61,7 +60,7 @@ void draw() {
     }
 
     //stops game if ball misses paddle
-    if (circleY>=height+20) {
+    if (circleY>=height-20) {
       play=false;
     }
 
@@ -76,8 +75,8 @@ void draw() {
 
 
     if (circleY>=310 ) {
-      if (circleX<=mouseX+50 && circleX>=mouseX-50) {
-        directionY=directionY*-1.1;
+      if (circleX<=mouseX+paddleWidth/2 && circleX>=mouseX-paddleWidth/2) {
+        directionY=directionY*-1.15;
         score=score+1;
       }
     }
